@@ -2,9 +2,19 @@ import os
 from flask import Flask, request, render_template_string, send_from_directory
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "/tmp"  # Use /tmp for writable space on Vercel
+UPLOAD_FOLDER = "/tmp"  # writable temporary space on Vercel
 
 FLAG = "ctf{basic_python_shell_upload_challenge}"
+
+# Write the flag file at startup
+try:
+    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+except:
+    pass
+
+flag_path = os.path.join(UPLOAD_FOLDER, "flag.txt")
+with open(flag_path, "w") as f:
+    f.write(FLAG)
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_file():
@@ -35,10 +45,6 @@ def upload_file():
 def uploaded_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
-@app.before_first_request
-def write_flag():
-    with open("/tmp/flag.txt", "w") as f:
-        f.write(FLAG)
+# Do NOT call app.run() when deploying serverlessly
 
-if __name__ == "__main__":
-    app.run()
+# Export app to be used by Vercel
