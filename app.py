@@ -50,7 +50,7 @@ def upload_and_execute():
         <h3>Error:</h3>
         <pre>{{ error }}</pre>
     {% endif %}
-    <p>Hint: Your script can read the flag from the <code>FLAG</code> variable or from the file <code>/tmp/flag.txt</code>.</p>
+    <p>Hint: Buy from the website.</p>
     ''', output=output, error=error)
 
 # Do not call app.run(), as Vercel runs the app serverlessly
