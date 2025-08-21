@@ -9,19 +9,27 @@ FLAG = "ctf{basic_python_shell_upload_challenge}"
 def upload_and_execute():
     output = None
     error = None
+
     if request.method == 'POST':
         file = request.files.get('file')
         if file and file.filename:
+            # Write the flag file freshly on every request
+            with open('/tmp/flag.txt', 'w') as f:
+                f.write(FLAG)
+
             code = file.read().decode()
             try:
-                # Redirect stdout to capture print output
+                # Capture stdout
                 old_stdout = sys.stdout
                 sys.stdout = io.StringIO()
-                
-                # Provide flag variable in exec environment
-                exec_globals = {'open': open, 'FLAG': FLAG}
+
+                # Provide the flag and open in exec environment
+                exec_globals = {
+                    'open': open,
+                    'FLAG': FLAG,
+                }
                 exec(code, exec_globals)
-                
+
                 output = sys.stdout.getvalue()
             except Exception as e:
                 error = str(e)
@@ -31,8 +39,8 @@ def upload_and_execute():
     return render_template_string('''
     <h2>Upload your Python script</h2>
     <form method="post" enctype="multipart/form-data">
-        <input type="file" name="file"/>
-        <input type="submit" value="Run"/>
+        <input type="file" name="file" />
+        <input type="submit" value="Run" />
     </form>
     {% if output %}
         <h3>Output:</h3>
@@ -42,8 +50,7 @@ def upload_and_execute():
         <h3>Error:</h3>
         <pre>{{ error }}</pre>
     {% endif %}
-    <p>Hint: Your script can read the flag variable <code>FLAG</code> or the file <code>/tmp/flag.txt</code></p>
+    <p>Hint: Your script can read the flag from the <code>FLAG</code> variable or from the file <code>/tmp/flag.txt</code>.</p>
     ''', output=output, error=error)
 
-if __name__ == '__main__':
-    app.run()
+# Do not call app.run(), as Vercel runs the app serverlessly
