@@ -2,7 +2,7 @@ import os
 from flask import Flask, request, redirect, url_for, render_template_string, send_from_directory
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "/tmp/uploads"
+UPLOAD_FOLDER = "/tmp"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 FLAG = "ctf{basic_python_shell_upload_challenge}"
