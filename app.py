@@ -3,7 +3,7 @@ import sys
 from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
-FLAG = "ctf{basic_python_shell_upload_challenge}"
+FLAG = "ctf{87t932r93q7}"
 
 @app.route('/', methods=['GET', 'POST'])
 def upload_and_execute():
