@@ -13,17 +13,17 @@ def upload_and_execute():
     if request.method == 'POST':
         file = request.files.get('file')
         if file and file.filename:
-            # Write the flag file freshly on every request
+           
             with open('/tmp/flag.txt', 'w') as f:
                 f.write(FLAG)
 
             code = file.read().decode()
             try:
-                # Capture stdout
+                
                 old_stdout = sys.stdout
                 sys.stdout = io.StringIO()
 
-                # Provide the flag and open in exec environment
+                
                 exec_globals = {
                     'open': open,
                     'FLAG': FLAG,
@@ -37,7 +37,7 @@ def upload_and_execute():
                 sys.stdout = old_stdout
 
     return render_template_string('''
-    <h2>Upload your Python script</h2>
+    <h2>Upload your Python file to run </h2>
     <form method="post" enctype="multipart/form-data">
         <input type="file" name="file" />
         <input type="submit" value="Run" />
@@ -53,4 +53,4 @@ def upload_and_execute():
    
     ''', output=output, error=error)
 
-# Do not call app.run(), as Vercel runs the app serverlessly
+
